@@ -10,6 +10,8 @@ class Ball {
     this.prevPositions = [];
 
     this.projectileHeight = projectileHeight;
+
+    this.maxHeightItReached = this.projectileHeight;
   }
 
   applyForce(f) {
@@ -18,6 +20,10 @@ class Ball {
   }
 
   update() {
+    if (this.position.y > this.maxHeightItReached) {
+      this.maxHeightItReached = this.position.y;
+    }
+
     this.projectileHeight = projectileHeight;
     this.prevPositions.push(this.position.copy());
     this.position.add(this.velocity);
@@ -99,7 +105,22 @@ class Ball {
     rotate(yComponentVector.heading());
     text(` ${(yVelocityMag / 10).toFixed(2)}`, 10, -10);
     pop();
+
+    // resultant velocity
+    push();
+    fill(255);
+    const velocityComponentHead = p5.Vector.add(
+      this.position,
+      velocityVector
+    ).add(0, this.projectileHeight * 60);
+    translate(velocityComponentHead.x, velocityComponentHead.y);
+    rotate(velocityVector.heading());
+    scale(1, -1);
+    text(`${(velocityVector.mag() / 10).toFixed(2)}`, -50, -10);
+    pop();
   }
+
+  //
 
   renderTraces() {
     push();

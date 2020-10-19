@@ -37,12 +37,11 @@ function draw() {
     deltaTime = 0;
   }
 
-  if (
-    ball.checkGroundHit(17 - projectileHeight * 60) &&
-    pauseWhenHitTheGround
-  ) {
+  if (ball.checkGroundHit(-projectileHeight * 60) && pauseWhenHitTheGround) {
     pauseSimualation();
   }
+
+  // writeMaths();
 
   push();
   textSize(20);
@@ -138,7 +137,23 @@ function handlePausePlay() {
   }
 }
 
-function writeMaths() {}
+function writeMaths() {
+  const u = initailVelocity;
+  const angle = radians(launchAngle);
+
+  const R = ((Math.pow(u, 2) * sin(2 * angle)) / gravity) * 60;
+  const H = ((Math.pow(u, 2) * Math.pow(sin(angle), 2)) / (2 * gravity)) * 60;
+  push();
+  stroke(255);
+  strokeWeight(2);
+  line(0, 0, R, 0);
+  line(R / 2, 0, R / 2, H);
+
+  //max height
+  line(0, ball.maxHeightItReached, ball.position.x, ball.maxHeightItReached);
+  console.table({ actualHeight: ball.maxHeightItReached, calculation: H });
+  pop();
+}
 
 function velocityOfInstances(t) {
   const g = gravity;
